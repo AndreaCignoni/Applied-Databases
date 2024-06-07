@@ -1,23 +1,25 @@
 import pymysql
 import mysql.connector
 from neo4j import GraphDatabase
+import config
 
 driver = None
 
 def neo4j_connect():
     global driver
-    uri = "neo4j://localhost:7687"
-    driver = GraphDatabase.driver(uri, auth=("neo4j", "neo4jneo4j"), max_connection_lifetime=1000)
+    uri = config.NEO4J_URI
+    auth = config.NEO4J_AUTH
+    max_connection_lifetime = config.NEO4J_MAX_CONNECTION_LIFETIME
+    driver = GraphDatabase.driver(uri, auth=auth, max_connection_lifetime=max_connection_lifetime)
 
 def establish_connection():
     # Establish connection to the database
     return pymysql.connect(
-        host="localhost",
-        user="root",
-        password="root",
-        db="appDBproj",
-        cursorclass=pymysql.cursors.DictCursor
-    )
+        host=config.MYSQL_HOST,
+        user=config.MYSQL_USER,
+        password=config.MYSQL_PASSWORD,
+        db=config.MYSQL_DB,
+        cursorclass=getattr(pymysql.cursors, config.MYSQL_CURSORCLASS)
 
 def search_cities_by_country(country_name):
     try:
