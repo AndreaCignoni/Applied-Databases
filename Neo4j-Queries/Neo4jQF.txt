@@ -1,0 +1,8 @@
+MATCH (t:Team)-[:WORKS_ON]->(p:Project)
+WHERE (p)<-[:OVERSEES]-(:Department{name:"Software"})
+WITH DISTINCT t.name AS Teams
+MATCH (t)-[:WORKS_ON]->(p:Project)
+WHERE (p)<-[:OVERSEES]-(:Department{name:"Human Resources"})
+AND t.name in Teams
+RETURN DISTINCT Teams
+ORDER BY Teams

@@ -1,0 +1,24 @@
+SELECT
+c1.Continent,
+MAX(c1.Name) AS Name,
+FORMAT(MAX(c1.Population), 0) AS `FORMAT(Population,0)`
+FROM
+country c1
+JOIN
+(
+SELECT
+Continent,
+MAX(Population) AS MaxPopulation
+FROM
+country
+WHERE
+Population > 0
+GROUP BY
+Continent
+) AS c2 ON c1.Continent = c2.Continent AND c1.Population = c2.MaxPopulation
+WHERE
+c1.Population > 0
+GROUP BY
+c1.Continent
+ORDER BY
+MAX(c1.Population) DESC;

@@ -1,0 +1,3 @@
+MATCH (e:Employee {eid: "E10"})-[:MEMBER_OF]->(team:Team)<-[:MEMBER_OF]-(other:Employee)
+WITH e, SUM(other.salary) AS totalSalaries
+RETURN totalSalaries + e.salary AS Salaries

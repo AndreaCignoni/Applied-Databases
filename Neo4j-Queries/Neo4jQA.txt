@@ -1,0 +1,3 @@
+MATCH (e:Employee{eid:"E05"})-[:MEMBER_OF]->(:Team)-[:WORKS_ON]->(p:Project)<-[:WORKS_ON]-(:Team)<-[:MEMBER_OF]-(other:Employee)
+WHERE other.eid <> "E05"
+RETURN COUNT(DISTINCT other) AS WorkersFromOtherTeams

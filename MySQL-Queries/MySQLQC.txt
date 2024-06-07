@@ -1,0 +1,14 @@
+SELECT
+c.Continent,
+c.Region,
+FLOOR(AVG(c.IndepYear)) AS AverageYearOfIndependence
+FROM
+country c
+WHERE
+c.IndepYear IS NOT NULL
+GROUP BY
+c.Region, c.Continent
+HAVING
+AverageYearOfIndependence IS NOT NULL
+ORDER BY
+AverageYearOfIndependence ASC, c.Region ASC;

@@ -1,0 +1,11 @@
+SELECT
+p.personID,
+p.personname,
+p.age,
+c.LifeExpectancy
+FROM
+person p
+JOIN
+city ci ON p.city = ci.ID
+JOIN
+country c ON ci.CountryCode = c.Code;

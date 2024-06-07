@@ -1,0 +1,34 @@
+SELECT
+c.Name AS Name,
+COALESCE(official.OfficialLanguageTotal, 0) AS OfficialLanguageTotal,
+COALESCE(nonofficial.NonOfficialLanguageTotal, 0) AS NonOfficialLanguageTotal
+FROM
+country c
+LEFT JOIN
+(
+SELECT
+CountryCode,
+SUM(Percentage) AS OfficialLanguageTotal
+FROM
+countrylanguage
+WHERE
+IsOfficial = 'T'
+GROUP BY
+CountryCode
+) AS official ON c.Code = official.CountryCode
+LEFT JOIN
+(
+SELECT
+CountryCode,
+SUM(Percentage) AS NonOfficialLanguageTotal
+FROM
+countrylanguage
+WHERE
+IsOfficial = 'F'
+GROUP BY
+CountryCode
+) AS nonofficial ON c.Code = nonofficial.CountryCode
+WHERE
+c.Region = 'Western Europe'
+ORDER BY
+c.Name;

@@ -1,0 +1,7 @@
+MATCH (e:Employee)
+WHERE
+(e)-[:MEMBER_OF]->(:Team)-[:WORKS_ON]->(:Project)<-[:OVERSEES]-(:Department{name:"Hardware"}) OR
+(e)-[:IN_CHARGE_OF]->(:Department{name:"Hardware"}) OR
+(e)-[:MANAGES]->(:Project)<-[:OVERSEES]-(:Department{name:"Hardware"})
+RETURN e.eid AS EID, e.name AS Name
+ORDER BY EID ASC

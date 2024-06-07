@@ -1,0 +1,9 @@
+MATCH (p:Project {name: "Training"})<-[:WORKS_ON]-(t:Team)<-[:MEMBER_OF]-(e:Employee)
+WITH t, COLLECT(e.salary) AS salaries
+WITH t, 
+  CASE 
+    WHEN SIZE(salaries) > 0 THEN REDUCE(s = 0, salary IN salaries | s + salary) / SIZE(salaries) 
+    ELSE NULL
+  END AS AverageSalary
+RETURN t.name AS Name, AverageSalary
+ORDER BY Name

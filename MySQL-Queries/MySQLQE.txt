@@ -1,0 +1,19 @@
+SELECT 
+c1.Name AS Name,
+cl.Language AS Language,
+CASE 
+WHEN cl.Percentage < 5 THEN '< 5'
+WHEN cl.Percentage BETWEEN 5 AND 10.9 THEN '5-10'
+WHEN cl.Percentage BETWEEN 11 AND 20.9 THEN '11-20'
+WHEN cl.Percentage BETWEEN 21 AND 49.9 THEN '21-50'
+ELSE '>50'
+END AS PercentageSpeakers
+FROM 
+country c1
+JOIN 
+countrylanguage cl ON c1.Code = cl.CountryCode
+WHERE 
+c1.Region = 'Northern Africa'
+ORDER BY 
+c1.Name, cl.Language;
+

@@ -1,0 +1,3 @@
+MATCH (manager:Employee {eid: "E16"})-[:MANAGES]->(p:Project)<-[:WORKS_ON]-(team:Team)<-[:MEMBER_OF]-(employee:Employee)
+WITH manager, SUM(employee.salary) AS TotalSalary
+RETURN TotalSalary

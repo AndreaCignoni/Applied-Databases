@@ -1,0 +1,245 @@
+MATCH(n) DETACH DELETE n;
+
+CREATE(p:Employee{eid:"E01",name:"Bert Fallon"});
+CREATE(p:Employee{eid:"E02",name:"Denise Jones"});
+create(p:Employee{eid:"E03",name:"Sarah Jones",role:"Engineer"});
+create(p:Employee{eid:"E04",name:"Tom Higgins",role:"Senior Engineer"});
+create(p:Employee{eid:"E05",name:"John Smith",role:"Engineer",salary:59992.32});
+create(p:Employee{eid:"E06",name:"Anne Smith",role:"Engineer",salary:59992.32});
+create(p:Employee{eid:"E07",name:"Jane Roberts",role:"Senior Engineer"});
+create(p:Employee{eid:"E08",name:"Thomas Kenny",role:"Engineer",salary:23999.34});
+create(p:Employee{eid:"E09",name:"Barbara Gallagher",role:"Engineer",age:21,salary:29000.00});
+create(p:Employee{eid:"E10",name:"Charlie Taylor",role:"Engineer",salary:54000.02});
+create(p:Employee{eid:"E11",name:"Johnathon O'Brien",role:"Technician",salary:53000.98});
+create(p:Employee{eid:"E12",name:"Johnny Travers",role:"Technician",salary:28044.98});
+create(p:Employee{eid:"E13",name:"Barry Taylor",role:"Engineer"});
+create(p:Employee{eid:"E14",name:"Noel Jones",role:"Engineer"});
+
+create(p:Employee:Manager{eid:"E15",name:"Tommy Kavanagh",role:"Senior Engineer",salary:62001.01});
+create(p:Employee:Manager{eid:"E16",name:"Mary Jones",role:"Senior Engineer",salary:49800.20});
+create(p:Employee:Manager{eid:"E17",name:"Paul Jones",role:"Senior Technician"});
+create(p:Employee:Manager{eid:"E18",name:"Sarah Jones",role:"Senior Engineer"});
+
+create(p:Employee:Manager{eid:"E19",name:"Alice Connors",role:"Senior Manager"});
+create(p:Employee:Manager{eid:"E20",name:"George McNamara",role:"Senior Manager"});
+create(p:Employee:Manager{eid:"E21",name:"Matthew Quinn",role:"Senior Manager"});
+
+CREATE CONSTRAINT eid_unique IF NOT EXISTS FOR (p:Employee) REQUIRE p.eid IS UNIQUE;
+
+CREATE(p:Project{name:"HW Upgrade", budget:500000});
+CREATE(p:Project{name:"UI Improvements", budget:10000});
+CREATE(p:Project{name:"Training", budget:80500});
+CREATE(p:Project{name:"Payroll - PRSI"});
+CREATE(p:Project{name:"Payroll - Pension"});
+CREATE(p:Project{name:"Cable Replacement", budget: 300000});
+CREATE(p:Project{name:"Customer Support"});
+
+CREATE CONSTRAINT pname_unique IF NOT EXISTS FOR (p:Project) REQUIRE p.name IS UNIQUE;
+
+CREATE(h:Team{name:"Red", discretionary:1500});
+CREATE(h:Team{name:"Blue", discretionary:950});
+CREATE(h:Team{name:"Green", discretionary:803});
+CREATE(h:Team{name:"Orange", discretionary:883});
+
+CREATE CONSTRAINT tname_unique IF NOT EXISTS FOR (p:Team) REQUIRE p.name IS UNIQUE;
+
+CREATE(d:Department{name:"Human Resources", budget:10000000, staff:984});
+CREATE(d:Department{name:"Customer Support", budget:25600000, staff:1593});
+CREATE(d:Department{name:"Hardware", budget:12000000, staff:523});
+CREATE(d:Department{name:"Software", budget:18000000, staff:15892});
+
+CREATE CONSTRAINT dname_unique IF NOT EXISTS FOR (p:Department) REQUIRE p.name IS UNIQUE;
+
+
+MATCH(t:Team{name:"Red"})
+MATCH(p:Project{name:"HW Upgrade"})
+CREATE(t)-[:WORKS_ON]->(p);
+
+MATCH(t:Team{name:"Red"})
+MATCH(p:Project{name:"Cable Replacement"})
+CREATE(t)-[:WORKS_ON]->(p);
+
+MATCH(t:Team{name:"Blue"})
+MATCH(p:Project{name:"Payroll - PRSI"})
+CREATE(t)-[:WORKS_ON]->(p);
+
+MATCH(t:Team{name:"Blue"})
+MATCH(p:Project{name:"Payroll - Pension"})
+CREATE(t)-[:WORKS_ON]->(p);
+
+MATCH(t:Team{name:"Blue"})
+MATCH(p:Project{name:"Training"})
+CREATE(t)-[:WORKS_ON]->(p);
+
+MATCH(t:Team{name:"Green"})
+MATCH(p:Project{name:"Training"})
+CREATE(t)-[:WORKS_ON]->(p);
+
+MATCH(t:Team{name:"Green"})
+MATCH(p:Project{name:"Payroll - PRSI"})
+CREATE(t)-[:WORKS_ON]->(p);
+
+MATCH(t:Team{name:"Orange"})
+MATCH(p:Project{name:"Customer Support"})
+CREATE(t)-[:WORKS_ON]->(p);
+
+MATCH(t:Team{name:"Orange"})
+MATCH(p:Project{name:"UI Improvements"})
+CREATE(t)-[:WORKS_ON]->(p);
+
+MATCH(t:Team{name:"Orange"})
+MATCH(p:Project{name:"Training"})
+CREATE(t)-[:WORKS_ON]->(p);
+
+
+MATCH(p:Employee{eid:"E01"})
+MATCH(h:Team{name:"Red"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E02"})
+MATCH(h:Team{name:"Red"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E03"})
+MATCH(h:Team{name:"Red"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E03"})
+MATCH(h:Team{name:"Red"})
+CREATE(p)-[:LEADER_OF]->(h);
+
+
+MATCH(p:Employee{eid:"E04"})
+MATCH(h:Team{name:"Red"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E05"})
+MATCH(h:Team{name:"Blue"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E06"})
+MATCH(h:Team{name:"Blue"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E07"})
+MATCH(h:Team{name:"Blue"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E08"})
+MATCH(h:Team{name:"Blue"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E08"})
+MATCH(h:Team{name:"Blue"})
+CREATE(p)-[:LEADER_OF]->(h);
+
+MATCH(p:Employee{eid:"E09"})
+MATCH(h:Team{name:"Green"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E09"})
+MATCH(h:Team{name:"Green"})
+CREATE(p)-[:LEADER_OF]->(h);
+
+MATCH(p:Employee{eid:"E10"})
+MATCH(h:Team{name:"Green"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E11"})
+MATCH(h:Team{name:"Green"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E12"})
+MATCH(h:Team{name:"Green"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E13"})
+MATCH(h:Team{name:"Orange"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E14"})
+MATCH(h:Team{name:"Orange"})
+CREATE(p)-[:MEMBER_OF]->(h);
+
+MATCH(p:Employee{eid:"E14"})
+MATCH(h:Team{name:"Orange"})
+CREATE(p)-[:LEADER_OF]->(h);
+
+
+
+MATCH(m:Manager{eid:"E15"})
+MATCH(p:Project{name:"HW Upgrade"})
+CREATE(m)-[:MANAGES]->(p);
+
+MATCH(m:Manager{eid:"E15"})
+MATCH(p:Project{name:"UI Improvements"})
+CREATE(m)-[:MANAGES]->(p);
+
+MATCH(m:Manager{eid:"E16"})
+MATCH(p:Project{name:"Training"})
+CREATE(m)-[:MANAGES]->(p);
+
+MATCH(m:Manager{eid:"E17"})
+MATCH(p:Project{name:"Payroll - PRSI"})
+CREATE(m)-[:MANAGES]->(p);
+
+MATCH(m:Manager{eid:"E17"})
+MATCH(p:Project{name:"Payroll - Pension"})
+CREATE(m)-[:MANAGES]->(p);
+
+MATCH(m:Manager{eid:"E18"})
+MATCH(p:Project{name:"Cable Replacement"})
+CREATE(m)-[:MANAGES]->(p);
+
+MATCH(m:Manager{eid:"E18"})
+MATCH(p:Project{name:"Customer Support"})
+CREATE(m)-[:MANAGES]->(p);
+
+MATCH(m:Manager{eid:"E19"})
+MATCH(d:Department{name:"Human Resources"})
+CREATE(m)-[:IN_CHARGE_OF]->(d);
+
+MATCH(m:Manager{eid:"E20"})
+MATCH(d:Department{name:"Customer Support"})
+CREATE(m)-[:IN_CHARGE_OF]->(d);
+
+MATCH(m:Manager{eid:"E21"})
+MATCH(d:Department{name:"Hardware"})
+CREATE(m)-[:IN_CHARGE_OF]->(d);
+
+MATCH(m:Manager{eid:"E21"})
+MATCH(d:Department{name:"Software"})
+CREATE(m)-[:IN_CHARGE_OF]->(d);
+
+
+MATCH(d:Department{name:"Human Resources"})
+MATCH(p:Project{name:"Payroll - PRSI"})
+CREATE(d)-[:OVERSEES]->(p);
+
+MATCH(d:Department{name:"Human Resources"})
+MATCH(p:Project{name:"Payroll - Pension"})
+CREATE(d)-[:OVERSEES]->(p);
+
+MATCH(d:Department{name:"Customer Support"})
+MATCH(p:Project{name:"Customer Support"})
+CREATE(d)-[:OVERSEES]->(p);
+
+MATCH(d:Department{name:"Customer Support"})
+MATCH(p:Project{name:"Training"})
+CREATE(d)-[:OVERSEES]->(p);
+
+MATCH(d:Department{name:"Hardware"})
+MATCH(p:Project{name:"Cable Replacement"})
+CREATE(d)-[:OVERSEES]->(p);
+
+MATCH(d:Department{name:"Hardware"})
+MATCH(p:Project{name:"HW Upgrade"})
+CREATE(d)-[:OVERSEES]->(p);
+
+MATCH(d:Department{name:"Software"})
+MATCH(p:Project{name:"UI Improvements"})
+CREATE(d)-[:OVERSEES]->(p);
+
+MATCH(d:Department{name:"Software"})
+MATCH(p:Project{name:"Training"})
+CREATE(d)-[:OVERSEES]->(p);
